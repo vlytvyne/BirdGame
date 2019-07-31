@@ -35,6 +35,11 @@ task dist(type: Jar) {
     with jar
 }
 
+jar {
+    manifest {}
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
 
 dist.dependsOn classes
 buildscript {
