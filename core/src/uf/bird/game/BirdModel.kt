@@ -9,7 +9,10 @@ private const val TEXTURE_PATH = "bird_animation.png"
 private const val ANIMATION_FRAMES_COUNT = 3
 private const val FRAME_DURATION = 0.1f
 
-class BirdModel(val positionX: Float, var positionY: Float, val width: Float, val height: Float) {
+const val BIRD_WIDTH = 50f
+const val BIRD_HEIGHT = 30f
+
+class BirdModel(val positionX: Float, var positionY: Float) {
 
 	private val spriteList = Texture(TEXTURE_PATH)
 

@@ -18,7 +18,7 @@ class BirdGame : ApplicationAdapter() {
 	override fun create() {
 		batch = SpriteBatch()
 		background = Texture("background.png")
-		bird = BirdModel(screenCenterX / 3, screenCenterY, 60f, 40f)
+		bird = BirdModel(screenCenterX / 3, screenCenterY)
 		birdController = BirdController(bird)
 		obstacles = ObstaclesModel()
 		obstaclesController = ObstaclesController(obstacles)
@@ -33,9 +33,11 @@ class BirdGame : ApplicationAdapter() {
 		obstaclesController.update(deltaTime)
 		batch.use {
 			it.draw(background, 0f, 0f, screenWidth, screenHeight)
-			it.draw(bird.currentFrame, bird.positionX, bird.positionY, bird.width, bird.height)
-			it.draw(obstacles.groundTexture, obstacles.groundStartX, GROUND_HEIGHT)
-			it.draw(obstacles.groundTexture, obstacles.groundStartX2, GROUND_HEIGHT)
+			it.draw(bird.currentFrame, bird.positionX, bird.positionY, BIRD_WIDTH, BIRD_HEIGHT)
+			it.draw(obstacles.bottomTubeTexture, obstacles.tubes.tubesX,obstacles.tubes.bottomTubeY)
+			it.draw(obstacles.topTubeTexture, obstacles.tubes.tubesX,obstacles.tubes.topTubeY)
+			it.draw(obstacles.groundTexture, obstacles.groundStartX, GROUND_START_Y)
+			it.draw(obstacles.groundTexture, obstacles.groundStartX2, GROUND_START_Y)
 		}
 	}
 
