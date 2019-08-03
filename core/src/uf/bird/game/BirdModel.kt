@@ -1,23 +1,24 @@
 package uf.bird.game
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.utils.Array as GdxArray
 
-const val TEXTURE_PATH = "birdanimation.png"
-const val ANIMATION_FRAMES_COUNT = 3
-const val FRAME_DURATION = 0.1f
-const val GRAVITY = -20f
-const val JUMP_VELOCITY = 7f
-const val ONE_SECOND = 1f
+private const val TEXTURE_PATH = "bird_animation.png"
+private const val ANIMATION_FRAMES_COUNT = 3
+private const val FRAME_DURATION = 0.1f
 
 class BirdModel(val positionX: Float, var positionY: Float, val width: Float, val height: Float) {
 
 	private val spriteList = Texture(TEXTURE_PATH)
 
+	val topOfBird
+		get() = positionY + spriteList.height
+
 	val animation: Animation<TextureRegion>
+
+	var velocityY = 0f
 	var currentFrame: TextureRegion
 
 	init{
@@ -27,7 +28,5 @@ class BirdModel(val positionX: Float, var positionY: Float, val width: Float, va
 		animation = Animation(FRAME_DURATION, frames)
 		currentFrame = animation.getKeyFrame(0f, true)
 	}
-
-	var velocityY = 0f
 
 }

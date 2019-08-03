@@ -12,27 +12,16 @@ class BirdGame : ApplicationAdapter() {
 	private lateinit var background: Texture
 	private lateinit var bird: BirdModel
 	private lateinit var birdController: BirdController
-
-	private val screenWidth
-		get() = Gdx.graphics.width.toFloat()
-
-	private val screenHeight
-		get() = Gdx.graphics.height.toFloat()
-
-	private val deltaTime
-		get() = Gdx.graphics.deltaTime
-
-	private val screenCenterX
-		get() = (screenWidth / 2).toFloat()
-
-	private val screenCenterY
-		get() = (screenHeight / 2).toFloat()
+	private lateinit var obstacles: ObstaclesModel
+	private lateinit var obstaclesController: ObstaclesController
 
 	override fun create() {
 		batch = SpriteBatch()
 		background = Texture("background.png")
 		bird = BirdModel(screenCenterX / 3, screenCenterY, 60f, 40f)
 		birdController = BirdController(bird)
+		obstacles = ObstaclesModel()
+		obstaclesController = ObstaclesController(obstacles)
 
 		Gdx.gl.glClearColor(.5f, .5f, .5f, 1f)
 	}
@@ -41,13 +30,33 @@ class BirdGame : ApplicationAdapter() {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
 		birdController.updateBirdPosition(deltaTime)
+		obstaclesController.update(deltaTime)
 		batch.use {
 			it.draw(background, 0f, 0f, screenWidth, screenHeight)
 			it.draw(bird.currentFrame, bird.positionX, bird.positionY, bird.width, bird.height)
+			it.draw(obstacles.groundTexture, obstacles.groundStartX, GROUND_HEIGHT)
+			it.draw(obstacles.groundTexture, obstacles.groundStartX2, GROUND_HEIGHT)
 		}
 	}
 
 	override fun dispose() {
 		batch.dispose()
+	}
+
+	companion object {
+		val screenWidth
+			get() = Gdx.graphics.width.toFloat()
+
+		val screenHeight
+			get() = Gdx.graphics.height.toFloat()
+
+		val deltaTime
+			get() = Gdx.graphics.deltaTime
+
+		val screenCenterX
+			get() = (screenWidth / 2)
+
+		val screenCenterY
+			get() = (screenHeight / 2)
 	}
 }

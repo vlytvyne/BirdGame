@@ -2,6 +2,10 @@ package uf.bird.game
 
 import com.badlogic.gdx.Gdx
 
+private const val TOP_OFFSET = 50
+private const val GRAVITY = -20f
+private const val JUMP_VELOCITY = 7f
+
 class BirdController(private val bird: BirdModel) {
 
 	private val isTouched
@@ -20,7 +24,7 @@ class BirdController(private val bird: BirdModel) {
 	}
 
 	private fun calculateBirdPosition(deltaTime: Float) {
-		if (isTouched) {
+		if (isTouched && bird.topOfBird < BirdGame.screenHeight - TOP_OFFSET) {
 			bird.velocityY = JUMP_VELOCITY
 		} else {
 			bird.velocityY += GRAVITY * deltaTime
