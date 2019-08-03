@@ -2,62 +2,52 @@ package uf.bird.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
 class BirdGame : ApplicationAdapter() {
-	private lateinit var shapeRenderer: ShapeRenderer
+
+	private lateinit var batch: SpriteBatch
+	private lateinit var background: Texture
+	private lateinit var bird: BirdModel
+	private lateinit var birdController: BirdController
 
 	private val screenWidth
-		get() = Gdx.graphics.width
+		get() = Gdx.graphics.width.toFloat()
 
 	private val screenHeight
-		get() = Gdx.graphics.height
+		get() = Gdx.graphics.height.toFloat()
 
 	private val deltaTime
 		get() = Gdx.graphics.deltaTime
 
-	private val centerX
+	private val screenCenterX
 		get() = (screenWidth / 2).toFloat()
 
-	private val centerY
+	private val screenCenterY
 		get() = (screenHeight / 2).toFloat()
 
-	private val isTouched
-		get() = Gdx.input.isTouched
-
-	private var circleX = 0f
-	private var circleY = 0f
-
 	override fun create() {
-		shapeRenderer = ShapeRenderer()
-		circleX = centerX
-		circleY = centerY
+		batch = SpriteBatch()
+		background = Texture("background.png")
+		bird = BirdModel(screenCenterX / 3, screenCenterY, 60f, 40f)
+		birdController = BirdController(bird)
+
+		Gdx.gl.glClearColor(.5f, .5f, .5f, 1f)
 	}
 
 	override fun render() {
-		Gdx.gl.glClearColor(.5f, .5f, .5f, 1f)
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-		if (isTouched) {
-			circleY += MOVE_SPEED * deltaTime
-		} else {
-			circleY -= MOVE_SPEED * deltaTime
+		birdController.updateBirdPosition(deltaTime)
+		batch.use {
+			it.draw(background, 0f, 0f, screenWidth, screenHeight)
+			it.draw(bird.currentFrame, bird.positionX, bird.positionY, bird.width, bird.height)
 		}
-
-		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
-		shapeRenderer.color = Color.GOLD
-		shapeRenderer.circle(circleX, circleY, CIRCLE_RADIUS)
-		shapeRenderer.end()
 	}
 
 	override fun dispose() {
-		shapeRenderer.dispose()
-	}
-
-	companion object {
-		const val CIRCLE_RADIUS = 50f
-		const val MOVE_SPEED = 100
+		batch.dispose()
 	}
 }
