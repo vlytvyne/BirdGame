@@ -34,8 +34,11 @@ class BirdGame : ApplicationAdapter() {
 		batch.use {
 			it.draw(background, 0f, 0f, screenWidth, screenHeight)
 			it.draw(bird.currentFrame, bird.positionX, bird.positionY, BIRD_WIDTH, BIRD_HEIGHT)
-			it.draw(obstacles.bottomTubeTexture, obstacles.tubes.tubesX,obstacles.tubes.bottomTubeY)
-			it.draw(obstacles.topTubeTexture, obstacles.tubes.tubesX,obstacles.tubes.topTubeY)
+			obstacles.tubesPairs.forEach {
+				tubes ->
+					it.draw(obstacles.bottomTubeTexture, tubes.tubesX, tubes.bottomTubeY)
+					it.draw(obstacles.topTubeTexture, tubes.tubesX, tubes.topTubeY)
+			}
 			it.draw(obstacles.groundTexture, obstacles.groundStartX, GROUND_START_Y)
 			it.draw(obstacles.groundTexture, obstacles.groundStartX2, GROUND_START_Y)
 		}
