@@ -1,9 +1,11 @@
-package uf.bird.game
+package uf.bird.game.view
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.math.Vector3
+import uf.bird.game.global.*
 
 private const val PLAY_BTN_PATH = "play_button.png"
 private const val PLAY_BTN_WIDTH = 90f
@@ -17,8 +19,8 @@ class StartScreen(private val game: BirdGame): ScreenAdapter() {
 	override fun show() {
 		playButton = Texture(PLAY_BTN_PATH)
 		playButtonHitbox = Rectangle(
-				(BirdGame.screenWidth - PLAY_BTN_WIDTH) / 2,
-				(BirdGame.screenHeight - PLAY_BTN_HEIGHT) / 2,
+				(VIEWPORT_WIDTH - PLAY_BTN_WIDTH) / 2,
+				(VIEWPORT_HEIGHT - PLAY_BTN_HEIGHT) / 2,
 				PLAY_BTN_WIDTH,
 				PLAY_BTN_HEIGHT
 		)
@@ -27,7 +29,7 @@ class StartScreen(private val game: BirdGame): ScreenAdapter() {
 
 	override fun render(delta: Float) {
 		game.batch.use {
-			it.draw(game.background, 0f, 0f, BirdGame.screenWidth, BirdGame.screenHeight)
+			it.draw(game.background, 0f, 0f, VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
 			it.draw(playButton,
 					playButtonHitbox.x,
 					playButtonHitbox.y,
@@ -39,8 +41,18 @@ class StartScreen(private val game: BirdGame): ScreenAdapter() {
 		}
 	}
 
-	private val isPlayButtonPressed
-			get() = playButtonHitbox.contains(Gdx.input.x.toFloat(), Gdx.input.y.toFloat()) && isTouched
+	private val isPlayButtonPressed: Boolean
+			get() {
+				if (isTouched) {
+					val touchCoordinate = Vector3(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f)
+					//convert screen coordinates to viewport coordinates
+					game.camera.unproject(touchCoordinate)
+					if (playButtonHitbox.contains(touchCoordinate.x, touchCoordinate.y)) {
+						return true
+					}
+				}
+				return false
+			}
 
 	override fun hide() {
 		playButton.dispose()

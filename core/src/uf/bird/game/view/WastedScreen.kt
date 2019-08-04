@@ -1,10 +1,11 @@
-package uf.bird.game
+package uf.bird.game.view
 
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.GlyphLayout
-
+import uf.bird.game.global.*
+import uf.bird.game.model.*
 
 private const val WASTED_PATH = "wasted.png"
 private const val TRY_AGAIN_PATH = "try_again.png"
@@ -16,7 +17,7 @@ private const val TOP_SCORE_TEXT_TOP_MARGIN = 30f
 
 class WastedScreen(private val game: BirdGame,
                    private val bird: BirdModel,
-                   private val obstacles:ObstaclesModel): ScreenAdapter() {
+                   private val obstacles: ObstaclesModel): ScreenAdapter() {
 
 	private lateinit var wasted: Texture
 	private lateinit var tryAgain: Texture
@@ -26,8 +27,8 @@ class WastedScreen(private val game: BirdGame,
 		tryAgain = Texture(TRY_AGAIN_PATH)
 		game.font.data.setScale(1f)
 
-		if (obstacles.tubesPassed > BirdGame.currentTopScore) {
-			BirdGame.currentTopScore = obstacles.tubesPassed
+		if (obstacles.tubesPassed > game.currentTopScore) {
+			game.currentTopScore = obstacles.tubesPassed
 		}
 	}
 
@@ -44,7 +45,7 @@ class WastedScreen(private val game: BirdGame,
 	}
 
 	private fun drawBackground(batch: Batch) {
-		batch.draw(game.background, 0f, 0f, BirdGame.screenWidth, BirdGame.screenHeight)
+		batch.draw(game.background, 0f, 0f, VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
 		batch.draw(bird.currentFrame, bird.positionX, bird.positionY, BIRD_WIDTH, BIRD_HEIGHT)
 		obstacles.tubesPairs.forEach { tubes ->
 			batch.draw(obstacles.bottomTubeTexture, tubes.tubesX, tubes.bottomTubeY)
@@ -56,11 +57,11 @@ class WastedScreen(private val game: BirdGame,
 
 	private fun drawGraphics(batch: Batch) {
 		batch.draw(wasted,
-				(BirdGame.screenWidth - WASTED_WIDTH) / 2,
-				BirdGame.screenHeight - WASTED_HEIGHT - WASTED_TEXT_TOP_MARGIN,
+				(VIEWPORT_WIDTH - WASTED_WIDTH) / 2,
+				VIEWPORT_HEIGHT - WASTED_HEIGHT - WASTED_TEXT_TOP_MARGIN,
 				WASTED_WIDTH,
 				WASTED_HEIGHT)
-		batch.draw(tryAgain, 0f, GROUND_SHOWN_HEIGHT, BirdGame.screenWidth, 300f)
+		batch.draw(tryAgain, 0f, GROUND_SHOWN_HEIGHT, VIEWPORT_WIDTH, 300f)
 	}
 
 
@@ -68,18 +69,18 @@ class WastedScreen(private val game: BirdGame,
 		val userScore = "Your score is: ${obstacles.tubesPassed}"
 		val glyphLayout = GlyphLayout()
 		glyphLayout.setText(game.font, userScore)
-		val textStartX = (BirdGame.screenWidth - glyphLayout.width) / 2
-		val textStartY = BirdGame.screenHeight - WASTED_HEIGHT - WASTED_TEXT_TOP_MARGIN - USER_SCORE_TEXT_TOP_MARGIN
+		val textStartX = (VIEWPORT_WIDTH - glyphLayout.width) / 2
+		val textStartY = VIEWPORT_HEIGHT - WASTED_HEIGHT - WASTED_TEXT_TOP_MARGIN - USER_SCORE_TEXT_TOP_MARGIN
 		game.font.draw(batch, userScore,
-				(BirdGame.screenWidth - glyphLayout.width) / 2,
+				(VIEWPORT_WIDTH - glyphLayout.width) / 2,
 				textStartY
 		)
 
-		val topScore = "Top score is: ${BirdGame.currentTopScore}"
+		val topScore = "Top score is: ${game.currentTopScore}"
 		glyphLayout.setText(game.font, topScore)
 		game.font.draw(batch, topScore,
-				(BirdGame.screenWidth - glyphLayout.width) / 2,
-				BirdGame.screenHeight - WASTED_HEIGHT - WASTED_TEXT_TOP_MARGIN - USER_SCORE_TEXT_TOP_MARGIN - TOP_SCORE_TEXT_TOP_MARGIN
+				(VIEWPORT_WIDTH - glyphLayout.width) / 2,
+				VIEWPORT_HEIGHT - WASTED_HEIGHT - WASTED_TEXT_TOP_MARGIN - USER_SCORE_TEXT_TOP_MARGIN - TOP_SCORE_TEXT_TOP_MARGIN
 				)
 	}
 

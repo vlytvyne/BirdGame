@@ -1,11 +1,9 @@
-package uf.bird.game
+package uf.bird.game.model
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Rectangle
 import java.util.*
 import kotlin.random.Random
-
-//TODO: MIN/MAX_BOTTOM_TUBE_Y count dynamically
 
 private const val TEXTURE_GROUND_PATH = "ground.png"
 private const val TEXTURE_TUBE_TOP = "tube_top.png"

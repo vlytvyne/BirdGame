@@ -1,12 +1,19 @@
-package uf.bird.game
+package uf.bird.game.global
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import uf.bird.game.view.StartScreen
+
+const val VIEWPORT_WIDTH = 320f
+const val VIEWPORT_HEIGHT = 600f
+const val VIEWPORT_CENTER_X = VIEWPORT_WIDTH / 2
+const val VIEWPORT_CENTER_Y = VIEWPORT_HEIGHT / 2
 
 private const val BACKGROUND_PATH = "background.png"
 private const val FONT_PATH = "gta_font.fnt"
@@ -15,25 +22,39 @@ private const val MUSIC_VOLUME = 0.2f
 private const val PREFERENCES_NAME = "UF_BIRD"
 private const val PREFERENCES_HIGHEST_SCORE_KEY = "highestScore"
 
+
+
 class BirdGame : Game() {
 
 	private lateinit var music: Music
 
+	private lateinit var prefs: Preferences
+
 	lateinit var batch: SpriteBatch
 	lateinit var background: Texture
 	lateinit var font: BitmapFont
-	lateinit var prefs: Preferences
+	lateinit var camera: OrthographicCamera
+
+	var currentTopScore = 0
 
 	override fun create() {
 		batch = SpriteBatch()
 		background = Texture(BACKGROUND_PATH)
 		font = BitmapFont(Gdx.files.internal(FONT_PATH))
+
 		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_PATH))
 		music.isLooping = true
 		music.volume = MUSIC_VOLUME
 		music.play()
+
 		prefs = Gdx.app.getPreferences(PREFERENCES_NAME)
 		currentTopScore = prefs.getInteger(PREFERENCES_HIGHEST_SCORE_KEY, 0)
+
+		camera = OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
+		camera.position.x = VIEWPORT_CENTER_X
+		camera.position.y = VIEWPORT_CENTER_Y
+		camera.update()
+
 		setScreen(StartScreen(this))
 
 		Gdx.gl.glClearColor(.5f, .5f, .5f, 1f)
@@ -48,22 +69,8 @@ class BirdGame : Game() {
 		prefs.flush()
 	}
 
-	companion object {
-		val screenWidth
-			get() = Gdx.graphics.width.toFloat()
-
-		val screenHeight
-			get() = Gdx.graphics.height.toFloat()
-
-		val deltaTime
-			get() = Gdx.graphics.deltaTime
-
-		val screenCenterX
-			get() = (screenWidth / 2)
-
-		val screenCenterY
-			get() = (screenHeight / 2)
-
-		var currentTopScore = 0
+	override fun render() {
+		batch.projectionMatrix = camera.combined
+		super.render()
 	}
 }

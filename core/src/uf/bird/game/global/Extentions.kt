@@ -1,4 +1,4 @@
-package uf.bird.game
+package uf.bird.game.global
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch

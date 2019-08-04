@@ -1,6 +1,6 @@
-package uf.bird.game
+package uf.bird.game.controller
 
-import com.badlogic.gdx.Gdx
+import uf.bird.game.model.*
 
 private const val MOVE_SPEED = 120
 private const val TUBES_GAP = 200f
