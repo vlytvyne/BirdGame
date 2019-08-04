@@ -2,23 +2,31 @@ package uf.bird.game
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 
 private const val BACKGROUND_PATH = "background.png"
 private const val FONT_PATH = "gta_font.fnt"
+private const val MUSIC_PATH = "gta_soundtrack.mp3"
+private const val MUSIC_VOLUME = 0.2f
 
 class BirdGame : Game() {
 
 	lateinit var batch: SpriteBatch
 	lateinit var background: Texture
 	lateinit var font: BitmapFont
+	lateinit var music: Music
 
 	override fun create() {
 		batch = SpriteBatch()
 		background = Texture(BACKGROUND_PATH)
 		font = BitmapFont(Gdx.files.internal(FONT_PATH))
+		music = Gdx.audio.newMusic(Gdx.files.internal(MUSIC_PATH))
+		music.isLooping = true
+		music.volume = MUSIC_VOLUME
+		music.play()
 		setScreen(StartScreen(this))
 
 		Gdx.gl.glClearColor(.5f, .5f, .5f, 1f)
