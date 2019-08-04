@@ -19,9 +19,9 @@ class BirdGame : ApplicationAdapter() {
 		batch = SpriteBatch()
 		background = Texture("background.png")
 		bird = BirdModel(screenCenterX / 3, screenCenterY)
-		birdController = BirdController(bird)
 		obstacles = ObstaclesModel()
 		obstaclesController = ObstaclesController(obstacles)
+		birdController = BirdController(bird, obstaclesController)
 
 		Gdx.gl.glClearColor(.5f, .5f, .5f, 1f)
 	}

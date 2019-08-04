@@ -3,6 +3,7 @@ package uf.bird.game
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.utils.Array as GdxArray
 
 private const val TEXTURE_PATH = "bird_animation.png"
@@ -18,6 +19,14 @@ class BirdModel(val positionX: Float, var positionY: Float) {
 
 	val topOfBird
 		get() = positionY + spriteList.height
+
+	val hitBox
+		get() = Rectangle(
+				positionX,
+				positionY,
+				(spriteList.width / ANIMATION_FRAMES_COUNT).toFloat(),
+				spriteList.height.toFloat()
+		)
 
 	val animation: Animation<TextureRegion>
 

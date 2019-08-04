@@ -1,6 +1,7 @@
 package uf.bird.game
 
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.Rectangle
 import java.util.*
 import kotlin.random.Random
 
@@ -37,6 +38,12 @@ class TubePair private constructor(
 		val bottomTubeY: Float,
 		val topTubeY: Float,
 		var tubesX: Float) {
+
+	val topTubeHitbox
+		get() = Rectangle(tubesX, topTubeY, TUBE_WIDTH, TUBE_HEIGHT)
+
+	val bottomTubeHitbox
+		get() = Rectangle(tubesX, bottomTubeY, TUBE_WIDTH, TUBE_HEIGHT)
 
 	companion object {
 		fun create(tubesX: Float): TubePair {
