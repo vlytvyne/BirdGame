@@ -6,7 +6,7 @@ private const val TOP_OFFSET = 50
 private const val GRAVITY = -20f
 private const val JUMP_VELOCITY = 7f
 
-class BirdController(private val bird: BirdModel, private val collisionDetector: CollisionDetector) {
+class BirdController(private val bird: BirdModel) {
 
 	private val isTouched
 		get() = Gdx.input.justTouched()
@@ -16,13 +16,6 @@ class BirdController(private val bird: BirdModel, private val collisionDetector:
 	fun updateBirdPosition(deltaTime: Float) {
 		calculateBirdPosition(deltaTime)
 		setAppropriateFrame(deltaTime)
-		checkCollision()
-	}
-
-	private fun checkCollision() {
-		if (collisionDetector.canCollide(bird.hitBox)) {
-			Gdx.app.log("TAG", "COLLISION")
-		}
 	}
 
 	private fun setAppropriateFrame(deltaTime: Float) {

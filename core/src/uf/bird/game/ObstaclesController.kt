@@ -1,13 +1,13 @@
 package uf.bird.game
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.math.Rectangle
 
 private const val MOVE_SPEED = 120
 private const val TUBES_GAP = 200f
 private const val FIRST_TUBE_GAP = 350f
 
-class ObstaclesController(private val obstacles: ObstaclesModel): CollisionDetector {
+class ObstaclesController(private val obstacles: ObstaclesModel,
+                          private val bird: BirdModel) {
 
 	init {
 		obstacles.tubesPairs.add(TubePair.create(FIRST_TUBE_GAP))
@@ -16,6 +16,10 @@ class ObstaclesController(private val obstacles: ObstaclesModel): CollisionDetec
 	fun update(deltaTime: Float) {
 		moveGround(deltaTime)
 		buildTubes(deltaTime)
+		countPassedTubes()
+		if (obstacleCollideWithBird()) {
+			bird.isDead = true
+		}
 	}
 
 	private fun buildTubes(deltaTime: Float) {
@@ -44,21 +48,28 @@ class ObstaclesController(private val obstacles: ObstaclesModel): CollisionDetec
 		}
 	}
 
-	override fun canCollide(entity: Rectangle): Boolean {
-		if (entity.y <= GROUND_SHOWN_HEIGHT) {
+	private fun obstacleCollideWithBird(): Boolean {
+		if (bird.hitBox.y <= GROUND_SHOWN_HEIGHT) {
 			return true
 		}
 		obstacles.tubesPairs.forEach {
-			if (it.bottomTubeHitbox.overlaps(entity) ||
-					it.topTubeHitbox.overlaps(entity)) {
+			if (it.bottomTubeHitbox.overlaps(bird.hitBox) ||
+					it.topTubeHitbox.overlaps(bird.hitBox)) {
 				return true
 			}
 		}
 		return false
 	}
-}
 
-interface CollisionDetector {
+	private fun countPassedTubes() {
+		obstacles.tubesPairs.forEach {
+			if (!it.passed) {
+				if (bird.positionX >= it.tubesX) {
+					it.passed = true
+					obstacles.tubesPassed++
+				}
+			}
+		}
+	}
 
-	fun canCollide(entity: Rectangle): Boolean
 }

@@ -31,6 +31,7 @@ class ObstaclesModel {
 
 	var groundStartX = 0f
 	var groundStartX2 = groundStartX + groundTexture.width
+	var tubesPassed = 0
 
 }
 
@@ -44,6 +45,8 @@ class TubePair private constructor(
 
 	val bottomTubeHitbox
 		get() = Rectangle(tubesX, bottomTubeY, TUBE_WIDTH, TUBE_HEIGHT)
+
+	var passed = false
 
 	companion object {
 		fun create(tubesX: Float): TubePair {

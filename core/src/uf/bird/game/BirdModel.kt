@@ -32,6 +32,7 @@ class BirdModel(val positionX: Float, var positionY: Float) {
 
 	var velocityY = 0f
 	var currentFrame: TextureRegion
+	var isDead = false
 
 	init{
 		val tmp2dimensionalFrames = TextureRegion.split(spriteList,
