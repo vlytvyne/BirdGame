@@ -11,11 +11,17 @@ class PlayScreen(private val game: BirdGame): ScreenAdapter() {
 	private lateinit var obstacles: ObstaclesModel
 	private lateinit var obstaclesController: ObstaclesController
 
+	private var gameStarted = false
+
+	private val isTouched
+		get() = Gdx.input.justTouched()
+
 	override fun show() {
 		bird = BirdModel(BirdGame.screenCenterX / 3, BirdGame.screenCenterY)
 		birdController = BirdController(bird)
 		obstacles = ObstaclesModel()
 		obstaclesController = ObstaclesController(obstacles, bird)
+		game.font.data.setScale(2f)
 
 		Gdx.gl.glClearColor(.5f, .5f, .5f, 1f)
 	}
@@ -23,8 +29,13 @@ class PlayScreen(private val game: BirdGame): ScreenAdapter() {
 	override fun render(deltaTime: Float) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-		birdController.updateBirdPosition(BirdGame.deltaTime)
-		obstaclesController.update(BirdGame.deltaTime)
+		if (isTouched) {
+			gameStarted = true
+		}
+		if (gameStarted) {
+			birdController.updateBirdPosition(BirdGame.deltaTime)
+			obstaclesController.update(BirdGame.deltaTime)
+		}
 		game.batch.use {
 			it.draw(game.background, 0f, 0f, BirdGame.screenWidth, BirdGame.screenHeight)
 			it.draw(bird.currentFrame, bird.positionX, bird.positionY, BIRD_WIDTH, BIRD_HEIGHT)
@@ -35,7 +46,7 @@ class PlayScreen(private val game: BirdGame): ScreenAdapter() {
 			}
 			it.draw(obstacles.groundTexture, obstacles.groundStartX, GROUND_START_Y)
 			it.draw(obstacles.groundTexture, obstacles.groundStartX2, GROUND_START_Y)
-			game.font.draw(it, obstacles.tubesPassed.toString(), 50f, 50f)
+			game.font.draw(it, obstacles.tubesPassed.toString(), BirdGame.screenWidth - 80f, BirdGame.screenHeight - 50f)
 		}
 		if (bird.isDead) {
 			game.setScreen(WastedScreen(game, bird, obstacles));

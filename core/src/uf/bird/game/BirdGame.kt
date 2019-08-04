@@ -6,9 +6,8 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 
-
-
 private const val BACKGROUND_PATH = "background.png"
+private const val FONT_PATH = "gta_font.fnt"
 
 class BirdGame : Game() {
 
@@ -19,7 +18,7 @@ class BirdGame : Game() {
 	override fun create() {
 		batch = SpriteBatch()
 		background = Texture(BACKGROUND_PATH)
-		font = BitmapFont()
+		font = BitmapFont(Gdx.files.internal(FONT_PATH))
 		setScreen(PlayScreen(this))
 
 		Gdx.gl.glClearColor(.5f, .5f, .5f, 1f)
