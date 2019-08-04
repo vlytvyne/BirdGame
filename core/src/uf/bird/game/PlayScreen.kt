@@ -18,7 +18,6 @@ class PlayScreen(private val game: BirdGame): ScreenAdapter() {
 		birdController = BirdController(bird)
 		obstacles = ObstaclesModel()
 		obstaclesController = ObstaclesController(obstacles, bird)
-		game.font.data.setScale(2f)
 
 		Gdx.gl.glClearColor(.5f, .5f, .5f, 1f)
 	}
@@ -43,7 +42,10 @@ class PlayScreen(private val game: BirdGame): ScreenAdapter() {
 			}
 			it.draw(obstacles.groundTexture, obstacles.groundStartX, GROUND_START_Y)
 			it.draw(obstacles.groundTexture, obstacles.groundStartX2, GROUND_START_Y)
+			game.font.data.setScale(2f)
 			game.font.draw(it, obstacles.tubesPassed.toString(), BirdGame.screenWidth - 80f, BirdGame.screenHeight - 50f)
+			game.font.data.setScale(0.8f)
+			game.font.draw(it, "FPS: ${Gdx.graphics.framesPerSecond}", BirdGame.screenWidth - 100, GROUND_SHOWN_HEIGHT + 20f)
 		}
 		if (bird.isDead) {
 			game.setScreen(WastedScreen(game, bird, obstacles));

@@ -1,6 +1,5 @@
 package uf.bird.game
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.ScreenAdapter
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
@@ -8,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout
 
 
 private const val WASTED_PATH = "wasted.png"
+private const val TRY_AGAIN_PATH = "try_again.png"
 private const val WASTED_WIDTH = 200f
 private const val WASTED_HEIGHT = 70f
 private const val WASTED_TEXT_TOP_MARGIN = 60f
-private const val SCORE_TEXT_TOP_MARGIN = 30f
-
-private const val TRY_AGAIN_PATH = "try_again.png"
+private const val USER_SCORE_TEXT_TOP_MARGIN = 30f
+private const val TOP_SCORE_TEXT_TOP_MARGIN = 30f
 
 class WastedScreen(private val game: BirdGame,
                    private val bird: BirdModel,
@@ -26,6 +25,10 @@ class WastedScreen(private val game: BirdGame,
 		wasted = Texture(WASTED_PATH)
 		tryAgain = Texture(TRY_AGAIN_PATH)
 		game.font.data.setScale(1f)
+
+		if (obstacles.tubesPassed > BirdGame.currentTopScore) {
+			BirdGame.currentTopScore = obstacles.tubesPassed
+		}
 	}
 
 	override fun render(delta: Float) {
@@ -62,16 +65,27 @@ class WastedScreen(private val game: BirdGame,
 
 
 	private fun drawScore(batch: Batch) {
-		val text = "Your score is: ${obstacles.tubesPassed}"
+		val userScore = "Your score is: ${obstacles.tubesPassed}"
 		val glyphLayout = GlyphLayout()
-		glyphLayout.setText(game.font, text)
-		game.font.draw(batch, text,
+		glyphLayout.setText(game.font, userScore)
+		val textStartX = (BirdGame.screenWidth - glyphLayout.width) / 2
+		val textStartY = BirdGame.screenHeight - WASTED_HEIGHT - WASTED_TEXT_TOP_MARGIN - USER_SCORE_TEXT_TOP_MARGIN
+		game.font.draw(batch, userScore,
 				(BirdGame.screenWidth - glyphLayout.width) / 2,
-				BirdGame.screenHeight - WASTED_HEIGHT - WASTED_TEXT_TOP_MARGIN - SCORE_TEXT_TOP_MARGIN)
+				textStartY
+		)
+
+		val topScore = "Top score is: ${BirdGame.currentTopScore}"
+		glyphLayout.setText(game.font, topScore)
+		game.font.draw(batch, topScore,
+				(BirdGame.screenWidth - glyphLayout.width) / 2,
+				BirdGame.screenHeight - WASTED_HEIGHT - WASTED_TEXT_TOP_MARGIN - USER_SCORE_TEXT_TOP_MARGIN - TOP_SCORE_TEXT_TOP_MARGIN
+				)
 	}
 
 	override fun hide() {
 		wasted.dispose()
 		tryAgain.dispose()
 	}
+
 }
