@@ -19,7 +19,7 @@ class BirdGame : Game() {
 		batch = SpriteBatch()
 		background = Texture(BACKGROUND_PATH)
 		font = BitmapFont(Gdx.files.internal(FONT_PATH))
-		setScreen(PlayScreen(this))
+		setScreen(StartScreen(this))
 
 		Gdx.gl.glClearColor(.5f, .5f, .5f, 1f)
 	}

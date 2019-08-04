@@ -13,9 +13,6 @@ class PlayScreen(private val game: BirdGame): ScreenAdapter() {
 
 	private var gameStarted = false
 
-	private val isTouched
-		get() = Gdx.input.justTouched()
-
 	override fun show() {
 		bird = BirdModel(BirdGame.screenCenterX / 3, BirdGame.screenCenterY)
 		birdController = BirdController(bird)
