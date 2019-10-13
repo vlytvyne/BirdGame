@@ -22,8 +22,6 @@ private const val MUSIC_VOLUME = 0.2f
 private const val PREFERENCES_NAME = "UF_BIRD"
 private const val PREFERENCES_HIGHEST_SCORE_KEY = "highestScore"
 
-
-
 class BirdGame : Game() {
 
 	private lateinit var music: Music
